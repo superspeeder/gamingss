@@ -74,7 +74,7 @@ namespace neuron {
         flecs::entity create_window(const WindowProperties &properties);
 
       private:
-        Engine *_engine;
+        Engine *_engine{nullptr};
     };
 
     struct GlfwExists {};
