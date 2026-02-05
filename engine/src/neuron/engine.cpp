@@ -17,11 +17,28 @@ namespace neuron {
 #else
         tags::DebugOnly = _world.entity();
 #endif
-
         _world.system("Print Delta Time")
             .kind(flecs::OnUpdate)
             .run([](const flecs::iter &it) { spdlog::info("FPS: {}", 1.0f / it.delta_time()); })
             .add(tags::DebugOnly);
+
+        disable_debug_systems();
+    }
+
+    void Engine::disable_debug_systems() const {
+        _world.defer_begin();
+        _world.query_builder<>().with(tags::DebugOnly).build().each([](flecs::entity entity) {
+            entity.add(flecs::Disabled);
+        });
+        _world.defer_end();
+    }
+
+    void Engine::enable_debug_systems() const {
+        _world.defer_begin();
+        _world.query_builder<>().with(tags::DebugOnly).with(flecs::Disabled).build().each([](flecs::entity entity) {
+            entity.remove(flecs::Disabled);
+        });
+        _world.defer_end();
     }
 
     Engine::~Engine() = default;

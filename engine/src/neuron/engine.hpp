@@ -31,10 +31,11 @@ namespace neuron {
 
         template<std::derived_from<Plugin> P>
         requires (std::constructible_from<P>)
-        void add_plugin() {
+        P* add_plugin() {
             P* plugin = new P();
             plugin->initialize(*this);
             _plugins.push_back(plugin);
+            return plugin;
         }
 
         template<typename T>
@@ -53,6 +54,9 @@ namespace neuron {
             return _flags.contains(std::type_index(typeid(T)));
         }
 
+
+        void disable_debug_systems() const;
+        void enable_debug_systems() const;
 
 
       private:

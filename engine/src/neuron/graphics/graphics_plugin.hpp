@@ -37,6 +37,8 @@ namespace neuron {
       public:
         Window(const Engine &engine, const WindowProperties &properties);
 
+        ~Window();
+
         Window(const Window &other)                = delete;
         Window(Window &&other) noexcept            = delete;
         Window &operator=(const Window &other)     = delete;
@@ -50,6 +52,8 @@ namespace neuron {
             seed ^= (seed << 6) + (seed >> 2) + 0x743DC447 + reinterpret_cast<std::size_t>(obj._window);
             return seed;
         }
+
+        [[nodiscard]] bool should_close() const;
 
       private:
         GLFWwindow *_window;
@@ -67,12 +71,16 @@ namespace neuron {
 
         void initialize(Engine &engine) override;
 
-        flecs::entity createWindow(const WindowProperties &properties);
+        flecs::entity create_window(const WindowProperties &properties);
 
       private:
         Engine *_engine;
     };
 
     struct GlfwExists {};
+
+    namespace phases {
+        extern flecs::entity PreUpdatePostEvents;
+    }
 
 } // namespace neuron

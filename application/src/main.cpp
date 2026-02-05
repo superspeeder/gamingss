@@ -13,7 +13,7 @@ int main() {
 
     spdlog::info("GLFW Exists: {}", engine.test_flag<neuron::GlfwExists>());
 
-    engine.add_plugin<neuron::GraphicsPlugin>();
+    auto* graphics_plugin = engine.add_plugin<neuron::GraphicsPlugin>();
 
     spdlog::info("GLFW Exists: {}", engine.test_flag<neuron::GlfwExists>());
     engine.run();
